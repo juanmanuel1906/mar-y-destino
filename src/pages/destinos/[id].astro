@@ -1,0 +1,63 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Olas from '../../components/Olas.astro';
+import { enlaceCotizar } from '../../lib/contacto';
+
+export async function getStaticPaths() {
+  const destinos = await getCollection('destinos', ({ data }) => data.publicado);
+  return destinos.map((destino) => ({ params: { id: destino.id }, props: { destino } }));
+}
+
+const { destino } = Astro.props;
+const { data } = destino;
+const { Content } = await render(destino);
+---
+
+<Base titulo={data.nombre} descripcion={data.resumen} imagen={data.imagen}>
+  <article>
+    <header class="destino-portada" data-portada>
+      <div class="portada-foto" data-portada-foto>
+        <img src={data.imagen} alt={data.imagenAlt} fetchpriority="high" style={`view-transition-name: foto-${destino.id}`} />
+      </div>
+      <div class="envoltura destino-portada-texto">
+        <p class="etiqueta" data-entra>{data.region}{data.coordenadas && ` · ${data.coordenadas}`}</p>
+        <h1><span class="linea"><span data-titulo>{data.nombre}</span></span></h1>
+      </div>
+      <Olas color="var(--papel)" />
+    </header>
+
+    <div class="envoltura destino-cuerpo">
+      <div class="prosa" data-grupo>
+        <p class="destino-resumen">{data.resumen}</p>
+        <div><Content /></div>
+
+        {data.incluye && data.incluye.length > 0 && (
+          <div>
+            <h2>Qué incluye el plan</h2>
+            <ul class="lista-incluye">{data.incluye.map((item) => <li>{item}</li>)}</ul>
+          </div>
+        )}
+
+        {data.experiencias && data.experiencias.length > 0 && (
+          <div>
+            <h2>Qué puedes vivir allí</h2>
+            <ul class="lista-ruta">{data.experiencias.map((item) => <li>{item}</li>)}</ul>
+          </div>
+        )}
+      </div>
+
+      <aside class="ficha">
+        {data.codigo && <p class="ficha-codigo" data-flap={data.codigo.toUpperCase()}>{data.codigo.toUpperCase()}</p>}
+        <dl>
+          {data.duracion && (<div><dt>Duración</dt><dd>{data.duracion}</dd></div>)}
+          {data.idealPara && (<div><dt>Ideal para</dt><dd>{data.idealPara}</dd></div>)}
+          <div><dt>Precio</dt><dd class={data.precio ? 'ficha-precio' : ''}>{data.precio || 'Según tus fechas y tu plan. Cotízalo sin compromiso.'}</dd></div>
+        </dl>
+        <a class="boton" href={enlaceCotizar(data.nombre)} data-iman>Quiero ir a {data.nombre}</a>
+      </aside>
+    </div>
+
+    <p class="envoltura volver"><a href="/#destinos">← Ver todos los planes</a></p>
+  </article>
+</Base>

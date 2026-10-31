@@ -1,0 +1,202 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import FormularioViaje from '../components/FormularioViaje.astro';
+import Olas from '../components/Olas.astro';
+import Pase from '../components/Pase.astro';
+import inicio from '../data/inicio.json';
+
+const { portada, destinos: secDestinos, servicios, proceso, nosotros, testimonios: secTestimonios, preguntas, contacto } = inicio;
+
+const destinos = (await getCollection('destinos', ({ data }) => data.publicado)).sort(
+  (a, b) => a.data.orden - b.data.orden,
+);
+const testimonios = await getCollection('testimonios', ({ data }) => data.publicado);
+const destacado = destinos.find((d) => d.data.precio) ?? destinos[0];
+
+const iconos: Record<string, string> = {
+  avion: 'M2 16l20-6-4-2-5 1.500L7 4 5 5l3.500 6L4 12.500 2.500 11 1 11.500 3 15z M3 20h18',
+  hotel: 'M3 21V4h12v17 M15 10h6v11 M1 21h22 M7 8h1 M11 8h1 M7 12h1 M11 12h1 M8 21v-4h3v4',
+  tour: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z M16 8l-2.500 5.500L8 16l2.500-5.500z',
+  traslado: 'M3 13l2-6h14l2 6v6h-3v-2H6v2H3z M3 13h18 M7 15h.01 M17 15h.01',
+  asistencia: 'M12 2l8 3v6c0 5-3.500 9-8 11-4.500-2-8-6-8-11V5z M12 8v7 M8.500 11.500h7',
+};
+---
+
+<Base>
+  <section class="portada" data-portada>
+    <div class="portada-foto" data-portada-foto>
+      <img src={portada.imagen} alt={portada.imagenAlt} fetchpriority="high" width="1920" height="1278" />
+    </div>
+    <div class="portada-brillo" aria-hidden="true"></div>
+
+    <svg class="portada-vuelo" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <mask id="mascara-vuelo"><path id="trazo-vuelo" d="M-60 620C280 260 820 90 1500 170" fill="none" stroke="#fff" stroke-width="8"></path></mask>
+      </defs>
+      <path d="M-60 620C280 260 820 90 1500 170" fill="none" stroke="#fff" stroke-width="2.500" stroke-dasharray="3 13" stroke-linecap="round" mask="url(#mascara-vuelo)"></path>
+      <path id="avion" class="avion" d="M-22-1-4-3-11-17-6-17 8-3 19-3C24-3 24 3 19 3L8 3-6 17-11 17-4 3-22 1-27 7-31 7-28 0-31-7-27-7Z"></path>
+    </svg>
+
+    <div class="envoltura portada-texto">
+      <p class="etiqueta" data-entra>{portada.etiqueta}</p>
+      <h1>
+        <span class="linea"><span data-titulo>{portada.titulo}</span></span>
+        <span class="linea"><em data-titulo>{portada.tituloAcento}</em></span>
+      </h1>
+      <div class="portada-accion">
+        <a class="boton" href="#destinos" data-entra data-iman>{portada.boton} <span aria-hidden="true">↓</span></a>
+        <p data-entra>{portada.texto}</p>
+      </div>
+    </div>
+
+    {destacado && (
+      <a class="portada-pase" href={`/destinos/${destacado.id}`} data-flota>
+        <span class="portada-pase-codigo">{destacado.data.codigo}</span>
+        <span>
+          <small>Destacado</small>
+          <strong>{destacado.data.nombre}</strong>
+          <span>{destacado.data.precio || 'Cotiza tu plan'}</span>
+        </span>
+      </a>
+    )}
+    <Olas color="var(--tinta)" />
+  </section>
+
+  <div class="cinta" aria-hidden="true">
+    <div class="cinta-pista" data-cinta>
+      {[0, 1, 2, 3].map(() => (
+        <span>{servicios.lista.map((s) => <>{s.titulo}<i>✦</i></>)}</span>
+      ))}
+    </div>
+  </div>
+
+  <section id="destinos" class="planes" data-planes>
+    <div class="planes-pista" data-pista>
+      <header class="planes-cabecera">
+        <p class="etiqueta">{secDestinos.etiqueta}</p>
+        <h2>{secDestinos.titulo}</h2>
+        <p>{secDestinos.texto}</p>
+        <p class="planes-pista-ayuda" aria-hidden="true">Sigue bajando <span>→</span></p>
+      </header>
+      {destinos.map((d) => <Pase destino={d} />)}
+      <div class="pase pase-otro" data-pase>
+        <h3>{secDestinos.otroTitulo}</h3>
+        <p>{secDestinos.otroTexto}</p>
+        <a class="boton boton-tinta" href="#contacto">{secDestinos.otroBoton}</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios" class="seccion servicios">
+    <div class="envoltura">
+      <header class="cabecera" data-sube>
+        <p class="etiqueta">{servicios.etiqueta}</p>
+        <h2>{servicios.titulo}</h2>
+      </header>
+      <ul class="mosaico" data-grupo>
+        {servicios.lista.map((s) => (
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d={iconos[s.icono]}></path></svg>
+            <h3>{s.titulo}</h3>
+            <p>{s.texto}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section id="proceso" class="proceso" data-proceso>
+    <div class="envoltura">
+      <header class="cabecera" data-sube>
+        <p class="etiqueta">{proceso.etiqueta}</p>
+        <h2>{proceso.titulo}</h2>
+      </header>
+      <svg class="ruta-linea" viewBox="0 0 1200 120" aria-hidden="true">
+        <defs>
+          <mask id="mascara-ruta"><path id="trazo-ruta" d="M0 90C150 10 250 10 400 70S650 120 800 50 1050 20 1200 60" fill="none" stroke="#fff" stroke-width="8"></path></mask>
+        </defs>
+        <path d="M0 90C150 10 250 10 400 70S650 120 800 50 1050 20 1200 60" fill="none" stroke="var(--oro)" stroke-width="2.500" stroke-dasharray="3 11" stroke-linecap="round" mask="url(#mascara-ruta)"></path>
+        <path id="avion-ruta" class="avion" d="M-22-1-4-3-11-17-6-17 8-3 19-3C24-3 24 3 19 3L8 3-6 17-11 17-4 3-22 1-27 7-31 7-28 0-31-7-27-7Z"></path>
+      </svg>
+      <ol class="ruta" data-grupo>
+        {proceso.pasos.map((paso) => (
+          <li>
+            <h3>{paso.titulo}</h3>
+            <p>{paso.texto}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="nosotros" class="seccion nosotros">
+    <div class="envoltura">
+      <p class="etiqueta">{nosotros.etiqueta}</p>
+      <p class="frase" data-frase>{nosotros.titulo}</p>
+      <ul class="puntos" data-grupo>
+        {nosotros.puntos.map((punto) => (
+          <li>
+            <h3>{punto.titulo}</h3>
+            <p>{punto.texto}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {testimonios.length > 0 && (
+    <section class="testimonios">
+      <div class="envoltura">
+        <header class="testimonios-cabecera" data-sube>
+          <p class="etiqueta">{secTestimonios.etiqueta}</p>
+          <h2>{secTestimonios.titulo}</h2>
+        </header>
+        <div class="rejilla-testimonios" data-grupo>
+          {testimonios.map((t) => (
+            <figure class="resena">
+              <span class="resena-comillas" aria-hidden="true">“</span>
+              <blockquote>{t.data.texto}</blockquote>
+              <figcaption>
+                <span class="resena-inicial" aria-hidden="true">{t.data.nombre.trim().charAt(0).toUpperCase()}</span>
+                <span class="resena-autor">
+                  <strong>{t.data.nombre}</strong>
+                  {t.data.viaje && <span>{t.data.viaje}</span>}
+                </span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="seccion envoltura preguntas">
+    <header class="cabecera" data-sube>
+      <p class="etiqueta">{preguntas.etiqueta}</p>
+      <h2>{preguntas.titulo}</h2>
+    </header>
+    <div class="acordeon" data-grupo>
+      {preguntas.lista.map((p) => (
+        <details>
+          <summary>{p.pregunta}</summary>
+          <p>{p.respuesta}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section id="contacto" class="contacto">
+    <div class="contacto-olas"><Olas color="var(--papel)" /></div>
+    <div class="envoltura contacto-rejilla">
+      <div data-sube>
+        <p class="etiqueta">{contacto.etiqueta}</p>
+        <h2>{contacto.titulo}</h2>
+        <p class="contacto-texto">{contacto.texto}</p>
+      </div>
+      <div data-sube>
+        <FormularioViaje destinos={destinos.map((d) => d.data.nombre)}>{contacto.boton}</FormularioViaje>
+      </div>
+    </div>
+  </section>
+</Base>

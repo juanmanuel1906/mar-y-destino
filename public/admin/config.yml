@@ -1,0 +1,191 @@
+# Configuración del panel de edición (Decap CMS). La agencia no necesita tocar este archivo.
+# Al publicar, reemplaza "repo" por el repositorio real de GitHub. Ver ENTREGA.md.
+backend:
+  name: github
+  repo: TU-USUARIO/mar-y-destino
+  branch: main
+
+# Permite editar en el computador con "npm run editar", sin iniciar sesión en GitHub.
+local_backend: true
+
+locale: es
+media_folder: public/imagenes
+public_folder: /imagenes
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: destinos
+    label: Destinos
+    label_singular: destino
+    description: Los destinos que aparecen en la página de inicio. Cada uno tiene su propia página.
+    folder: src/content/destinos
+    create: true
+    delete: true
+    slug: "{{nombre}}"
+    identifier_field: nombre
+    summary: "{{orden}}. {{nombre}} — {{region}}"
+    sortable_fields: [orden, nombre]
+    fields:
+      - { name: nombre, label: Nombre del destino, widget: string }
+      - { name: region, label: Región y país, widget: string, hint: "Ejemplo: Caribe colombiano" }
+      - { name: resumen, label: Resumen corto, widget: text, hint: "Una o dos frases para la tarjeta de la página de inicio." }
+      - { name: imagen, label: Foto principal, widget: image, hint: "Horizontal, de unos 1400 px de ancho y menos de 500 KB. Usa solo fotos propias o con permiso." }
+      - { name: imagenAlt, label: Descripción de la foto, widget: string, hint: "Describe lo que se ve. Ayuda a personas con discapacidad visual y a Google." }
+      - { name: credito, label: Crédito de la foto, widget: string, required: false, hint: "Autor y licencia, si la foto lo exige." }
+      - { name: body, label: Descripción completa, widget: markdown, buttons: [bold, italic, link, bulleted-list], editor_components: [] }
+      - { name: experiencias, label: Qué puedes vivir allí, widget: list, required: false, field: { name: texto, label: Experiencia, widget: string } }
+      - { name: idealPara, label: Ideal para, widget: string, required: false }
+      - { name: duracion, label: Duración, widget: string, required: false, hint: "Ejemplo: 5 días, 4 noches. Si lo dejas vacío, no se muestra." }
+      - { name: precio, label: Precio, widget: string, required: false, hint: "Ejemplo: Desde $2.500.000 por persona. Si lo dejas vacío, se invita a cotizar." }
+      - { name: incluye, label: Qué incluye el plan, widget: list, required: false, field: { name: texto, label: Elemento incluido, widget: string }, hint: "Si lo dejas vacío, no se muestra." }
+      - { name: codigo, label: Código del aeropuerto, widget: string, required: false, hint: "Las 3 letras grandes de la tarjeta de embarque. Ejemplo: MAD" }
+      - { name: coordenadas, label: Coordenadas, widget: string, required: false, hint: "Detalle decorativo. Ejemplo: 10°25′N 75°33′O" }
+      - { name: orden, label: Orden en la página, widget: number, value_type: int, default: 10, min: 1, hint: "1 aparece primero." }
+      - { name: publicado, label: Visible en el sitio, widget: boolean, default: true }
+
+  - name: testimonios
+    label: Testimonios
+    label_singular: testimonio
+    description: Opiniones reales de viajeros. La sección aparece sola cuando agregas el primero.
+    folder: src/content/testimonios
+    create: true
+    delete: true
+    slug: "{{nombre}}"
+    identifier_field: nombre
+    fields:
+      - { name: nombre, label: Nombre del viajero, widget: string }
+      - { name: viaje, label: Viaje, widget: string, required: false, hint: "Ejemplo: San Andrés, 2026" }
+      - { name: texto, label: Testimonio, widget: text }
+      - { name: publicado, label: Visible en el sitio, widget: boolean, default: true }
+
+  - name: ajustes
+    label: Ajustes
+    delete: false
+    editor: { preview: false }
+    files:
+      - name: sitio
+        label: Datos de la agencia
+        file: src/data/sitio.json
+        fields:
+          - { name: nombre, label: Nombre de la agencia, widget: string }
+          - { name: logo, label: Logo, widget: image, hint: "Cuadrado, se muestra dentro de un círculo. Mínimo 300 x 300 px." }
+          - { name: eslogan, label: Frase corta, widget: string, required: false }
+          - { name: descripcion, label: Descripción para Google, widget: text, hint: "Unas dos líneas. Es lo que suele verse en los resultados de búsqueda." }
+          - { name: whatsapp, label: WhatsApp, widget: string, required: false, hint: "Con indicativo de país, solo números. Ejemplo: 573001234567. Los botones y el formulario lo usan." }
+          - { name: email, label: Correo, widget: string, required: false }
+          - { name: telefono, label: Teléfono visible, widget: string, required: false }
+          - { name: direccion, label: Dirección, widget: string, required: false }
+          - { name: horario, label: Horario de atención, widget: string, required: false }
+          - { name: instagram, label: Enlace de Instagram, widget: string, required: false, hint: "La dirección completa, con https://" }
+          - { name: facebook, label: Enlace de Facebook, widget: string, required: false }
+          - { name: tiktok, label: Enlace de TikTok, widget: string, required: false }
+          - { name: rnt, label: Registro Nacional de Turismo (RNT), widget: string, required: false }
+          - { name: avisoLegal, label: Aviso legal al pie de página, widget: text, required: false }
+          - { name: url, label: Dirección web del sitio, widget: string, required: false, hint: "Ejemplo: https://www.marydestino.com" }
+
+      - name: inicio
+        label: Textos de la página de inicio
+        file: src/data/inicio.json
+        fields:
+          - name: portada
+            label: Portada
+            widget: object
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título (primera línea), widget: string }
+              - { name: tituloAcento, label: Título (segunda línea), widget: string }
+              - { name: texto, label: Texto, widget: text }
+              - { name: boton, label: Texto del botón, widget: string }
+              - { name: imagen, label: Foto, widget: image, hint: "Horizontal, de unos 1920 px de ancho y menos de 600 KB." }
+              - { name: imagenAlt, label: Descripción de la foto, widget: string }
+              - { name: credito, label: Crédito de la foto, widget: string, required: false }
+          - name: destinos
+            label: Sección de destinos
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título, widget: string }
+              - { name: texto, label: Texto, widget: text }
+              - { name: otroTitulo, label: "Tarjeta final: título", widget: string }
+              - { name: otroTexto, label: "Tarjeta final: texto", widget: text }
+              - { name: otroBoton, label: "Tarjeta final: botón", widget: string }
+          - name: servicios
+            label: Servicios
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título, widget: string }
+              - name: lista
+                label: Servicios
+                label_singular: servicio
+                widget: list
+                summary: "{{fields.titulo}}"
+                fields:
+                  - { name: icono, label: Ícono, widget: select, options: [{ label: Avión, value: avion }, { label: Hotel, value: hotel }, { label: Brújula, value: tour }, { label: Carro, value: traslado }, { label: Escudo, value: asistencia }] }
+                  - { name: titulo, label: Título, widget: string }
+                  - { name: texto, label: Texto, widget: text }
+          - name: proceso
+            label: Cómo trabajamos
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título, widget: string }
+              - name: pasos
+                label: Pasos
+                label_singular: paso
+                widget: list
+                summary: "{{fields.titulo}}"
+                fields:
+                  - { name: titulo, label: Título, widget: string }
+                  - { name: texto, label: Texto, widget: text }
+          - name: nosotros
+            label: Quiénes somos
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Frase principal, widget: text, hint: "Se ilumina palabra por palabra al bajar por la página." }
+              - name: puntos
+                label: Puntos destacados
+                label_singular: punto
+                widget: list
+                summary: "{{fields.titulo}}"
+                fields:
+                  - { name: titulo, label: Título, widget: string }
+                  - { name: texto, label: Texto, widget: text }
+          - name: testimonios
+            label: Sección de reseñas
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título, widget: string }
+          - name: preguntas
+            label: Preguntas frecuentes
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título, widget: string }
+              - name: lista
+                label: Preguntas
+                label_singular: pregunta
+                widget: list
+                summary: "{{fields.pregunta}}"
+                fields:
+                  - { name: pregunta, label: Pregunta, widget: string }
+                  - { name: respuesta, label: Respuesta, widget: text }
+          - name: contacto
+            label: Contacto
+            widget: object
+            collapsed: true
+            fields:
+              - { name: etiqueta, label: Texto pequeño, widget: string }
+              - { name: titulo, label: Título, widget: string }
+              - { name: texto, label: Texto, widget: text }
+              - { name: boton, label: Texto del botón, widget: string }

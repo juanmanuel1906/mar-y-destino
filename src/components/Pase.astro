@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  destino: CollectionEntry<'destinos'>;
+}
+
+const { destino } = Astro.props;
+const { data } = destino;
+---
+
+<a class="pase" href={`/destinos/${destino.id}`} data-pase>
+  <div class="pase-foto">
+    <img src={data.imagen} alt={data.imagenAlt} loading="lazy" style={`view-transition-name: foto-${destino.id}`} data-foto-pase />
+    {data.precio && <span class="pase-sello">Plan disponible</span>}
+  </div>
+  <div class="pase-cuerpo">
+    <div class="pase-fila">
+      {data.codigo && <span class="pase-codigo" data-flap={data.codigo.toUpperCase()}>{data.codigo.toUpperCase()}</span>}
+      {data.coordenadas && <span class="pase-coord">{data.coordenadas}</span>}
+    </div>
+    <h3>{data.nombre}</h3>
+    <p class="pase-region">{data.region}</p>
+    <div class="pase-talon">
+      <div>
+        {(data.duracion || !data.precio) && <span class="pase-rotulo">{data.duracion || 'A tu medida'}</span>}
+        <strong>{data.precio || 'Cotiza tu plan'}</strong>
+      </div>
+      <span class="pase-flecha" aria-hidden="true">→</span>
+    </div>
+  </div>
+</a>

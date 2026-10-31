@@ -1,0 +1,15 @@
+---
+interface Props {
+  color: string;
+}
+
+const { color } = Astro.props;
+// Cada ola mide dos periodos iguales para que el desplazamiento sea continuo.
+const ola = 'M0 40 C150 70 350 10 500 40 S850 70 1000 40 S1350 10 1500 40 S1850 70 2000 40 V120 H0 Z';
+---
+
+<div class="olas" aria-hidden="true" style={`--ola: ${color}`}>
+  <svg class="ola ola-1" viewBox="0 0 2000 120" preserveAspectRatio="none"><path d={ola}></path></svg>
+  <svg class="ola ola-2" viewBox="0 0 2000 120" preserveAspectRatio="none"><path d={ola}></path></svg>
+  <svg class="ola ola-3" viewBox="0 0 2000 120" preserveAspectRatio="none"><path d={ola}></path></svg>
+</div>

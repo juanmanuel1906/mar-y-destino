@@ -1,0 +1,122 @@
+---
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/fraunces/wght-italic.css';
+import '@fontsource-variable/instrument-sans';
+import 'lenis/dist/lenis.css';
+import '../styles/global.css';
+import sitio from '../data/sitio.json';
+import { enlaceCotizar, numeroWhatsapp, enlaceBotonWhatsapp } from '../lib/contacto';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+  imagen?: string;
+}
+
+const { titulo, descripcion = sitio.descripcion, imagen = '/imagenes/portada-johnny-cay.webp' } = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · ${sitio.eslogan}`;
+const canonica = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : null;
+const imagenAbsoluta = Astro.site ? new URL(imagen, Astro.site).href : null;
+const redes = [
+  {
+    nombre: 'Instagram',
+    url: sitio.instagram,
+    icono: '<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17.300" cy="6.700" r="1.300" fill="currentColor"></circle>',
+  },
+  {
+    nombre: 'Facebook',
+    url: sitio.facebook,
+    icono: '<path fill="currentColor" d="M14 8.500V11h3.200l-.5 3.500H14V22h-3.700v-7.500H8V11h2.300V8.200C10.300 5.500 12 4 14.400 4c1.100 0 2.200.2 2.600.3v3h-1.700c-1.100 0-1.300.5-1.300 1.200Z"></path>',
+  },
+  {
+    nombre: 'TikTok',
+    url: sitio.tiktok,
+    icono: '<path fill="currentColor" d="M16 3c.3 2.400 1.700 3.900 4 4.100v3.100c-1.500 0-2.800-.4-4-1.200v6.200a6 6 0 1 1-5-5.900v3.200a2.900 2.900 0 1 0 2 2.700V3h3Z"></path>',
+  },
+].filter((red) => red.url);
+const datosContacto = Boolean(numeroWhatsapp || sitio.telefono || sitio.email || sitio.direccion || sitio.horario);
+const anio = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <meta name="theme-color" content="#071d4a" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {canonica && <link rel="canonical" href={canonica} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={sitio.nombre} />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    {imagenAbsoluta && <meta property="og:image" content={imagenAbsoluta} />}
+  </head>
+  <body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+    <div class="progreso" aria-hidden="true" data-progreso></div>
+    <header class="barra" data-barra>
+      <a class="logo" href="/" aria-label={`${sitio.nombre}, ir al inicio`}>
+        <img src={sitio.logo} alt="" width="44" height="44" />
+        <span>{sitio.nombre}</span>
+      </a>
+      <nav aria-label="Principal">
+        <a class="enlace-nav" href="/#destinos">Planes</a>
+        <a class="enlace-nav" href="/#servicios">Servicios</a>
+        <a class="enlace-nav" href="/#proceso">Cómo trabajamos</a>
+        <a class="boton boton-pequeno" href="/#contacto" data-iman>Cotizar</a>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="pie">
+      <p class="pie-gigante" aria-hidden="true" data-pie-gigante>{sitio.nombre}</p>
+      <div class="envoltura pie-rejilla">
+        <p class="pie-lema">{sitio.eslogan}</p>
+        <div>
+          <h2 class="pie-titulo"><a href="/#contacto">Escríbenos <span aria-hidden="true">→</span></a></h2>
+          {datosContacto && (
+            <ul>
+              {numeroWhatsapp && <li><a href={enlaceCotizar()}>WhatsApp</a></li>}
+              {sitio.telefono && <li><a href={`tel:${sitio.telefono.replace(/[^\d+]/g, '')}`}>{sitio.telefono}</a></li>}
+              {sitio.email && <li><a href={`mailto:${sitio.email}`}>{sitio.email}</a></li>}
+              {sitio.direccion && <li>{sitio.direccion}</li>}
+              {sitio.horario && <li>{sitio.horario}</li>}
+            </ul>
+          )}
+        </div>
+        {redes.length > 0 && (
+          <div>
+            <h2 class="pie-titulo">Síguenos</h2>
+            <ul class="pie-redes">
+              {redes.map((red) => (
+                <li>
+                  <a href={red.url} rel="noopener" target="_blank" aria-label={red.nombre}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true" set:html={red.icono}></svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+      <div class="envoltura pie-legal">
+        <p>© {anio} {sitio.nombre}. Todos los derechos reservados.{sitio.rnt && ` RNT ${sitio.rnt}.`}</p>
+        {sitio.avisoLegal && <p>{sitio.avisoLegal}</p>}
+      </div>
+    </footer>
+
+    <a class="flotante" href={enlaceBotonWhatsapp} target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.600 15.100L2 22l5-1.300A10 10 0 1 0 12 2Zm5.800 14.200c-.3.700-1.400 1.300-2 1.400-.5.100-1.200.1-1.900-.1a15 15 0 0 1-1.700-.6 13.400 13.400 0 0 1-5.100-4.500c-.4-.5-1.200-1.600-1.200-3s.8-2.200 1-2.500c.3-.3.600-.4.800-.4h.6c.2 0 .4 0 .6.500l.8 2c.1.200.1.400 0 .5l-.3.500-.4.500c-.1.100-.3.300-.1.600s.7 1.200 1.600 2c1.100 1 2 1.300 2.300 1.400.3.200.5.100.6 0l.9-1c.2-.3.400-.2.600-.1l1.900.9c.3.100.5.200.5.300.1.200.1.800-.1 1.500Z"></path></svg>
+    </a>
+
+    <script>
+      import '../scripts/animaciones.js';
+    </script>
+  </body>
+</html>

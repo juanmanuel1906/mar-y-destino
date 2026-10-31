@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import inicio from '../data/inicio.json';
+
+const destinos = await getCollection('destinos', ({ data }) => data.publicado);
+const creditos = [
+  { lugar: 'Portada', credito: inicio.portada.credito },
+  ...destinos.map((d) => ({ lugar: d.data.nombre, credito: d.data.credito })),
+].filter((item) => item.credito);
+---
+
+<Base titulo="Créditos de las fotos">
+  <section class="seccion envoltura creditos">
+    <h1>Créditos de las fotos</h1>
+    <p>Gracias a quienes comparten sus imágenes con licencias libres. Las fotos se publican adaptadas en tamaño y formato.</p>
+    <dl>
+      {creditos.map((item) => (<div><dt>{item.lugar}</dt><dd>{item.credito}</dd></div>))}
+    </dl>
+  </section>
+</Base>

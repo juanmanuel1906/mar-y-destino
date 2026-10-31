@@ -1,0 +1,25 @@
+{
+  "name": "mar-y-destino",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "editar": "concurrently -n sitio,panel -c cyan,magenta \"astro dev\" \"decap-server\"",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "astro": "^7.3.8",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.27"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6",
+    "decap-server": "^3.11.6"
+  }
+}

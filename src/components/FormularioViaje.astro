@@ -1,0 +1,76 @@
+---
+import sitio from '../data/sitio.json';
+import { numeroWhatsapp } from '../lib/contacto';
+
+interface Props {
+  destinos: string[];
+}
+
+const { destinos } = Astro.props;
+const activo = Boolean(numeroWhatsapp || sitio.email);
+---
+
+<form id="form-viaje" class="formulario" data-whatsapp={numeroWhatsapp} data-email={sitio.email} data-sitio={sitio.nombre}>
+  <label class="campo">
+    <span>Tu nombre</span>
+    <input name="nombre" type="text" autocomplete="name" required />
+  </label>
+  <label class="campo">
+    <span>¿A dónde te gustaría ir?</span>
+    <select name="destino">
+      {destinos.map((destino) => <option>{destino}</option>)}
+      <option>Otro destino o aún no lo sé</option>
+    </select>
+  </label>
+  <div class="campo-doble">
+    <label class="campo">
+      <span>Fechas aproximadas</span>
+      <input name="fechas" type="text" placeholder="Ej.: julio de 2027" />
+    </label>
+    <label class="campo">
+      <span>Personas</span>
+      <input name="personas" type="number" min="1" inputmode="numeric" placeholder="2" />
+    </label>
+  </div>
+  <label class="campo">
+    <span>Cuéntanos tu idea</span>
+    <textarea name="mensaje" rows="4" placeholder="Qué te gustaría vivir, presupuesto de referencia…"></textarea>
+  </label>
+  <button class="boton" type="submit" disabled={!activo}>
+    <slot />
+  </button>
+  {activo
+    ? <p class="nota-form">{numeroWhatsapp ? 'Se abrirá WhatsApp con tu mensaje listo para enviar.' : 'Se abrirá tu correo con el mensaje listo para enviar.'}</p>
+    : <p class="nota-form aviso" role="alert">Formulario inactivo: falta configurar el WhatsApp o el correo en Ajustes › Datos de la agencia.</p>}
+</form>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#form-viaje');
+  if (form) {
+    const preseleccion = new URLSearchParams(location.search).get('destino');
+    const lista = form.elements.namedItem('destino') as HTMLSelectElement;
+    if (preseleccion && [...lista.options].some((op) => op.value === preseleccion)) {
+      lista.value = preseleccion;
+    }
+
+    form.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      const datos = new FormData(form);
+      const lineas = [
+        `Hola, soy ${datos.get('nombre')} y quiero planear un viaje.`,
+        `Destino: ${datos.get('destino')}`,
+        datos.get('fechas') && `Fechas: ${datos.get('fechas')}`,
+        datos.get('personas') && `Personas: ${datos.get('personas')}`,
+        datos.get('mensaje') && `Mi idea: ${datos.get('mensaje')}`,
+      ].filter(Boolean);
+      const mensaje = encodeURIComponent(lineas.join('\n'));
+      const { whatsapp, email, sitio } = form.dataset;
+      if (whatsapp) {
+        window.open(`https://wa.me/${whatsapp}?text=${mensaje}`, '_blank', 'noopener');
+      } else if (email) {
+        const asunto = encodeURIComponent(`Quiero planear un viaje con ${sitio}`);
+        location.href = `mailto:${email}?subject=${asunto}&body=${mensaje}`;
+      }
+    });
+  }
+</script>

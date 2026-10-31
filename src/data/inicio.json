@@ -1,0 +1,71 @@
+{
+  "portada": {
+    "etiqueta": "Agencia de viajes · Colombia · El mundo",
+    "titulo": "Tu mundo,",
+    "tituloAcento": "nuestro destino.",
+    "texto": "Planes, vuelos y experiencias únicas. Reserva fácil y viaja con quien te acompaña en todo el proceso.",
+    "boton": "Ver planes",
+    "imagen": "/imagenes/portada-johnny-cay.webp",
+    "imagenAlt": "Mar turquesa con olas suaves y cielo despejado en Johnny Cay, San Andrés",
+    "credito": "Mario Carvajal, CC BY 3.0"
+  },
+  "destinos": {
+    "etiqueta": "Planes y destinos",
+    "titulo": "Elige tu próximo pase de abordar",
+    "texto": "Algunas ideas para empezar. Cada plan se puede ajustar a tus fechas y tu forma de viajar.",
+    "otroTitulo": "¿Tienes otro lugar en mente?",
+    "otroTexto": "Cuéntanos a dónde quieres ir y buscamos la mejor forma de llevarte.",
+    "otroBoton": "Proponer un destino"
+  },
+  "servicios": {
+    "etiqueta": "Qué hacemos",
+    "titulo": "Todo tu viaje, en un solo lugar",
+    "lista": [
+      { "icono": "avion", "titulo": "Vuelos", "texto": "Buscamos la ruta y el tiquete que mejor se ajustan a tu viaje." },
+      { "icono": "hotel", "titulo": "Hoteles", "texto": "Alojamiento según tu destino y tu presupuesto." },
+      { "icono": "tour", "titulo": "Tours", "texto": "Experiencias para vivir cada lugar." },
+      { "icono": "traslado", "titulo": "Traslados", "texto": "Del aeropuerto al hotel, sin complicaciones." },
+      { "icono": "asistencia", "titulo": "Asistencia", "texto": "Asistencia médica y acompañamiento para viajar con tranquilidad." }
+    ]
+  },
+  "proceso": {
+    "etiqueta": "Cómo trabajamos",
+    "titulo": "Tu viaje, en cuatro paradas",
+    "pasos": [
+      { "titulo": "Nos cuentas", "texto": "A dónde sueñas ir, con quién, cuándo y cuánto quieres invertir." },
+      { "titulo": "Trazamos la ruta", "texto": "Te enviamos una propuesta con opciones claras y lo que incluye cada una." },
+      { "titulo": "Ajustamos y reservamos", "texto": "Afinamos los detalles contigo y, cuando estés de acuerdo, confirmamos todo." },
+      { "titulo": "Zarpas sin preocupaciones", "texto": "Recibes tus documentos de viaje y sabes a quién escribirle si necesitas algo." }
+    ]
+  },
+  "nosotros": {
+    "etiqueta": "Quiénes somos",
+    "titulo": "Viajar debería sentirse fácil desde el primer mensaje. Por eso te damos asesoría personalizada, opciones claras y acompañamiento durante todo el proceso.",
+    "puntos": [
+      { "titulo": "Asesoría personalizada", "texto": "Hablas con una persona que conoce tu plan." },
+      { "titulo": "Reserva fácil", "texto": "Del primer mensaje a la confirmación, sin enredos." },
+      { "titulo": "Claridad antes de pagar", "texto": "Sabes qué incluye tu plan antes de decidir." },
+      { "titulo": "Conectados con el mundo", "texto": "República Dominicana, Colombia y mucho más." }
+    ]
+  },
+  "testimonios": {
+    "etiqueta": "Reseñas",
+    "titulo": "Lo que cuentan nuestros viajeros"
+  },
+  "preguntas": {
+    "etiqueta": "Preguntas frecuentes",
+    "titulo": "Antes de despegar",
+    "lista": [
+      { "pregunta": "¿Qué necesitan para enviarme una cotización?", "respuesta": "El destino o la idea que tienes, las fechas aproximadas, cuántas personas viajan y un presupuesto de referencia. Si aún no tienes algo de esto claro, lo definimos contigo." },
+      { "pregunta": "¿Solo venden los destinos que aparecen aquí?", "respuesta": "No. Son algunas ideas para inspirarte. Si tienes otro lugar en mente, escríbenos y revisamos cómo llevarte." },
+      { "pregunta": "¿Los precios publicados pueden cambiar?", "respuesta": "Sí. El valor puede variar según la temporada, la disponibilidad y la fecha de compra. Te confirmamos la cifra exacta para tus fechas antes de reservar." },
+      { "pregunta": "¿Necesito pasaporte o visa?", "respuesta": "Depende del destino y de tu nacionalidad. Lo revisamos al armar tu propuesta, y siempre conviene confirmarlo con la autoridad oficial antes de viajar." }
+    ]
+  },
+  "contacto": {
+    "etiqueta": "Contacto",
+    "titulo": "¿A dónde vamos?",
+    "texto": "Cuéntanos tu idea, aunque todavía esté verde. Te responderemos para empezar a trazar la ruta.",
+    "boton": "Enviar mi idea de viaje"
+  }
+}
